@@ -21,7 +21,8 @@ const mix = require('laravel-mix');
 mix.js('resources/assets/js/app.js', 'public/js').vue({
   options: {
     compilerOptions: {
-      isCustomElement: (tag) => ['md-linedivider'].includes(tag),
-    },
+    //   isCustomElement: (tag) => ['md-linedivider'].includes(tag),
+     isCustomElement: () => true  
+},
   },
 }).sass('resources/sass/app.scss', 'public/css') .postCss('resources/css/app.css', 'public/css', []);

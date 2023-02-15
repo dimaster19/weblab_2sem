@@ -17738,50 +17738,18 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
 /*!************************************!*\
   !*** ./resources/assets/js/app.js ***!
   \************************************/
-/***/ ((__unused_webpack_module, __unused_webpack_exports, __webpack_require__) => {
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
-// require('./bootstrap')
-
-// import { createApp } from 'vue'
-// import HelloWorld from './components/Welcome'
-
-// const app = createApp({})
-
-// app.component('dropzone', HelloWorld)
-
-// app.mount('#app')
-
-/**
- * First we will load all of this project's JavaScript dependencies which
- * includes Vue and other libraries. It is a great starting point when
- * building robust, powerful web applications using Vue and Laravel.
- */
-
+"use strict";
+__webpack_require__.r(__webpack_exports__);
+/* harmony import */ var vue__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
+/* harmony import */ var _components_FileUploaderComponent__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(/*! ./components/FileUploaderComponent */ "./resources/assets/js/components/FileUploaderComponent.vue");
 __webpack_require__(/*! ./bootstrap */ "./resources/assets/js/bootstrap.js");
-window.Vue = __webpack_require__(/*! vue */ "./node_modules/vue/dist/vue.esm-bundler.js");
 
-/**
- * The following block of code may be used to automatically register your
- * Vue components. It will recursively scan this directory for the Vue
- * components and automatically register them with their "basename".
- *
- * Eg. ./components/ExampleComponent.vue -> <example-component></example-component>
- */
 
-// const files = require.context('./', true, /\.vue$/i)
-// files.keys().map(key => Vue.component(key.split('/').pop().split('.')[0], files(key).default))
-
-Vue.component('file-uploader-component', (__webpack_require__(/*! ./components/FileUploaderComponent.vue */ "./resources/assets/js/components/FileUploaderComponent.vue")["default"]));
-
-/**
- * Next, we will create a fresh Vue application instance and attach it to
- * the page. Then, you may begin adding components to this application
- * or customize the JavaScript scaffolding to fit your unique needs.
- */
-
-var app = new Vue({
-  el: '#app'
-});
+var app = (0,vue__WEBPACK_IMPORTED_MODULE_0__.createApp)({});
+app.component('dropzone', _components_FileUploaderComponent__WEBPACK_IMPORTED_MODULE_1__["default"]);
+app.mount('#app');
 
 /***/ }),
 
