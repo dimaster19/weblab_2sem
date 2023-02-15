@@ -9,8 +9,8 @@
 </head>
 
 <body class="antialiased">
-    <div class="content" id="app">
-        <div class="title m-b-md">
+    <div id="app">
+        <div>
             File Uploader - Dropzone
         </div>
         <file-uploader-component></file-uploader-component>
@@ -31,8 +31,8 @@
         </form>
     </div>
     <!-- <script src="{{ mix('js/app.js')}}"></script> -->
-    <script src="{{asset('js/app.js') }} "></script>
 
 </body>
+<script src="{{mix('js/app.js') }} "></script>
 
 </html>

@@ -18,12 +18,11 @@ const mix = require('laravel-mix');
 //         //
 //     ]);
 
-mix.js('resources/assets/js/app.js', 'public/js').vue({
-  options: {
-    compilerOptions: {
-    // isCustomElement: (tag) => ['md-linedivider'].includes(tag),
-    isCustomElement: tag => tag === 'file-uploader-component'
-
-},
-  },
-}).sass('resources/sass/app.scss', 'public/css') .postCss('resources/css/app.css', 'public/css', []);
+// mix.js('resources/assets/js/app.js', 'public/js').vue({
+//     options: {
+//       compilerOptions: {
+//         isCustomElement: (tag) => ['file-uploader-component'].includes(tag),
+//       },
+//     },
+//   });
+mix.js('resources/js/app.js', 'public/js').vue();
