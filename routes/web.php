@@ -16,5 +16,6 @@ use App\Http\Controllers\HomePageController;
 
 
 Route::get('/', [HomePageController::class, 'load']);
-Route::post('file-import', [HomePageController::class, 'fileImport'])->name('file-import');
+Route::post('/file-import', [HomePageController::class, 'fileImport'])->name('file-import');
+
 Route::get('/test', [HomePageController::class, 'load2']);
