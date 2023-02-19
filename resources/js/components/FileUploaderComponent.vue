@@ -1,43 +1,31 @@
-<!-- 
+
 <template>
-    <div>
-      <vue-dropzone ref="myVueDropzone" id="dropzone" :options="dropzoneOptions"></vue-dropzone>
-    </div>
-  </template>
-  
-  <script>
-  import vue2Dropzone from "vue2-dropzone";
-  import "vue2-dropzone/dist/vue2Dropzone.min.css";
-  export default {
-    name: "FileUploader",
-    components: {
-      vueDropzone: vue2Dropzone
-    },
-    data: function() {
-      return {
-        dropzoneOptions: {
-          url: "http://127.0.0.1:8000/api/image/upload/store",
-          thumbnailWidth: 150,
-          maxFilesize: 0.5,
-          headers: { "My-Awesome-Header": "header value" }
-        }
-      };
-    },
-    props: {
-      msg: String
-    }
-  };
-  </script> -->
-  
-<template>
-    <div style="height: 300px; width: 300px; border: 1px solid red; position: relative;">
-        <DropZone :maxFiles="Number(10000000000)" url="http://127.0.0.1:8000/file-import" method="POST" :uploadOnDrop="true"
-            :multipleUpload="false" :parallelUpload="1" :headers="csrfHeader">
+    <div style=" width: 300px; position: relative; margin: 20px auto ;">
+        <DropZone :acceptedFiles="['xlsx']" @errorAdd="onError" :maxFiles="Number(1)"
+            url="http://127.0.0.1:8000/file-import" method="POST" :uploadOnDrop="true" :multipleUpload="false"
+            :parallelUpload="1" :headers="csrfHeader">
             <input type="hidden" name="csrf-token" :value="csrfToken">
         </DropZone>
+    </div>
 
 
 
+
+    <!-- Модалка -->
+    <div class="modal" id="staticBackdrop" data-bs-backdrop="static" data-bs-keyboard="false" tabindex="-1"
+        aria-labelledby="staticBackdropLabel" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="staticBackdropLabel">Заказать звонок</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" v-on:click="closeModal" aria-label="Закрыть"></button>
+                </div>
+                <div class="modal-body">
+                    какая-то хуетень
+                </div>
+
+            </div>
+        </div>
     </div>
 </template>
 
@@ -57,6 +45,22 @@ export default defineComponent({
                 'X-CSRF-TOKEN': document.head.querySelector('meta[name="csrf-token"]').content
             }
         }
+    },
+    methods: {
+        onError() {
+            document.getElementsByClassName('modal')[0].style.display = "block"
+        },
+        // modal
+        closeModal() {
+
+            document.getElementsByClassName('modal')[0].style.display = "none"
+
+        }
     }
 });
+
+
+
 </script>
+
+

@@ -19,11 +19,16 @@ class HomePageController extends Controller
 
     public function fileImport(Request $request)
     {
+        $xlsx_file =  $request->file('file')->getClientOriginalName();
+        $ext = pathinfo($xlsx_file, PATHINFO_EXTENSION);
+       dd( $ext);
+        if (!empty($xlsx_file) && $ext == 'xlsx' ){
+            Excel::import(new AccountingsImport, $request->file('file'));
+            $request->file('file')->store('temp');
+            echo 'success';
+        }
+        else echo 'error';
 
-
-        Excel::import(new AccountingsImport, $request->file('file'));
-        $request->file('file')->store('temp');
-        return back()->with('success', 'Excel Data Imported successfully.');
     }
 
 
