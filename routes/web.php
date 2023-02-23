@@ -2,6 +2,7 @@
 
 use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\HomePageController;
+use App\Http\Controllers\RegisterController;
 
 /*
 |--------------------------------------------------------------------------
@@ -17,5 +18,5 @@ use App\Http\Controllers\HomePageController;
 
 Route::get('/', [HomePageController::class, 'load']);
 Route::post('/file-import', [HomePageController::class, 'fileImport'])->name('file-import');
-
-Route::get('/test', [HomePageController::class, 'load2']);
+Route::get('/signup', [RegisterController::class, 'register'])->name('signup');
+Route::post('/signup', [RegisterController::class, 'create'])->name('create');

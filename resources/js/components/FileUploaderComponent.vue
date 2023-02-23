@@ -37,7 +37,6 @@ export default defineComponent({
     components: {
         DropZone,
     },
-    name: 'App',
     setup() {
         return {
             csrfToken: document.head.querySelector('meta[name="csrf-token"]').content,
