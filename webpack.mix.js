@@ -21,7 +21,7 @@ const mix = require('laravel-mix');
 mix.js('resources/js/app.js', 'public/js').vue({
     options: {
       compilerOptions: {
-        isCustomElement: (tag) => ['drop-zone', 'signup'].includes(tag),
+        isCustomElement: (tag) => ['drop-zone', 'signup', 'pagination'].includes(tag),
       },
     },
   });

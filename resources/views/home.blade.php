@@ -13,7 +13,6 @@
 </head>
 
 <body class="antialiased">
-    <div class="">{{ auth()->user()->name}}</div>
 
 
     <div id="app">

@@ -5,6 +5,7 @@ use App\Http\Controllers\HomePageController;
 use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CabinetPageController;
+use App\Http\Controllers\ViewPageController;
 
 /*
 |--------------------------------------------------------------------------
@@ -30,3 +31,8 @@ Route::get('/signin', [LoginController::class, 'login'])->name('signin');
 
 Route::get('/cabinet', [CabinetPageController::class, '__invoke'])->name('cabinet');
 Route::post('/cabinet', [CabinetPageController::class, 'getName'])->name('getName');
+
+Route::get('/view-data', [ViewPageController::class, '__invoke'])->name('view-data');
+// Route::post('/view-data', [ViewPageController::class, 'getData'])->name('getData');
+Route::get('/view-data/{page}', [ViewPageController::class, 'getData'])->name('getData');
+Route::post('/view-data/{page}', [ViewPageController::class, 'getData'])->name('getData');
