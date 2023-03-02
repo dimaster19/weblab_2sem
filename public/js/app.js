@@ -21026,23 +21026,63 @@ __webpack_require__.r(__webpack_exports__);
   data: function data() {
     return {
       elem: null,
-      page: 10
+      page: 10,
+      newaccountings: this.accountings.data,
+      nextpage: null,
+      course: null,
+      group: null,
+      subject: null,
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
     };
   },
   created: function created() {
-    console.log(this.accountings);
     this.elem = this.accountings['links'];
+    this.nextpage = this.accountings['current_page'] + 1;
+    console.log(this.nextpage);
     console.log(Object.keys(this.elem).length); // last elem of arr ['links']
     this.accountings['links'][0]['label'] = 'Prev';
     this.accountings['links'][Object.keys(this.elem).length - 1]['label'] = 'Next';
   },
   methods: {
-    clickCallback: function clickCallback(el, elem) {
-      elem = $(el).text();
-      console.log(elem);
-      axios.get('/view-data?page=').then(function (response) {})["catch"](function (error) {
+    btnClick: function btnClick() {
+      var _this = this;
+      axios.get('/getdata?page=' + this.nextpage).then(function (response) {
+        _this.newaccountings = response.data.data;
+        console.log(response);
+        console.log(_this.newaccountings[0]);
+        document.getElementById("lazy").style.display = "table-row-group";
+        document.getElementById("lazybutton").style.display = "none";
+      })["catch"](function (error) {
         console.log(error);
       });
+    },
+    addClick: function addClick() {
+      this.group = document.getElementById("group").value;
+      this.course = document.getElementById("course").value;
+      this.subject = document.getElementById("subject").value;
+      console.log(this.group + ' - ' + this.course + ' - ' + this.subject);
+      if (this.group && this.course && this.subject) {
+        axios.post('/add-data', {
+          group: this.group,
+          course: this.course,
+          subject: this.subject
+        }).then(function (response) {
+          console.log(response);
+          if (response.data === 'added') alert('Успешно добавлено');
+        })["catch"](function (error) {
+          console.log(error);
+        });
+      } else alert('Заполните все поля');
+    },
+    closeModal: function closeModal() {
+      document.getElementsByClassName('addmodalbutton')[0].style.display = "none";
+      document.getElementsByClassName('editmodalbutton')[0].style.display = "none";
+      document.getElementsByClassName('removemodalbutton')[0].style.display = "none";
+    },
+    modalClick: function modalClick(e) {
+      console.log(e);
+      document.getElementsByClassName(e)[0].style.display = "block";
+      console.log(document.getElementsByClassName(e)[0]);
     }
   }
 });
@@ -21330,40 +21370,220 @@ var _hoisted_23 = {
   scope: "row"
 };
 var _hoisted_24 = {
-  "aria-label": "Page navigation example"
+  id: "lazy",
+  style: {
+    "display": "none"
+  }
 };
 var _hoisted_25 = {
-  "class": "pagination"
+  scope: "row"
 };
 var _hoisted_26 = {
-  "class": "page-item"
+  scope: "row"
 };
-var _hoisted_27 = ["href"];
+var _hoisted_27 = {
+  scope: "row"
+};
 var _hoisted_28 = {
-  key: 0
+  scope: "row"
 };
 var _hoisted_29 = {
-  key: 1
+  scope: "row"
 };
 var _hoisted_30 = {
-  key: 2
+  scope: "row"
 };
-var _hoisted_31 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
-  "class": ""
-}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-  type: "button",
-  "class": "btn btn-primary"
-}, "Primary")], -1 /* HOISTED */);
-
+var _hoisted_31 = {
+  scope: "row"
+};
+var _hoisted_32 = {
+  scope: "row"
+};
+var _hoisted_33 = {
+  scope: "row"
+};
+var _hoisted_34 = {
+  scope: "row"
+};
+var _hoisted_35 = {
+  scope: "row"
+};
+var _hoisted_36 = {
+  scope: "row"
+};
+var _hoisted_37 = {
+  scope: "row"
+};
+var _hoisted_38 = {
+  scope: "row"
+};
+var _hoisted_39 = {
+  scope: "row"
+};
+var _hoisted_40 = {
+  scope: "row"
+};
+var _hoisted_41 = {
+  scope: "row"
+};
+var _hoisted_42 = {
+  scope: "row"
+};
+var _hoisted_43 = {
+  scope: "row"
+};
+var _hoisted_44 = {
+  scope: "row"
+};
+var _hoisted_45 = {
+  "aria-label": "Page navigation example"
+};
+var _hoisted_46 = {
+  "class": "pagination"
+};
+var _hoisted_47 = {
+  "class": "page-item"
+};
+var _hoisted_48 = ["href"];
+var _hoisted_49 = {
+  "class": "d-flex w-100 justify-content-center"
+};
+var _hoisted_50 = {
+  "class": "modal fade",
+  id: "addModal",
+  tabindex: "-1",
+  "aria-labelledby": "exampleModalLabel",
+  "aria-hidden": "true"
+};
+var _hoisted_51 = {
+  "class": "modal-dialog"
+};
+var _hoisted_52 = {
+  "class": "modal-content"
+};
+var _hoisted_53 = {
+  "class": "modal-header"
+};
+var _hoisted_54 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("h5", {
+  "class": "modal-title",
+  id: "exampleModalLabel"
+}, "Modal title", -1 /* HOISTED */);
+var _hoisted_55 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "modal-body"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
+  action: "",
+  method: "post"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "input-group mb-3"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "input-group-text"
+}, "Course"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "text",
+  id: "course",
+  "class": "form-control"
+})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "input-group mb-3"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "input-group-text"
+}, "Group"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "text",
+  id: "group",
+  "class": "form-control"
+})]), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  "class": "input-group mb-3"
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
+  "class": "input-group-text"
+}, "Subject"), /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "text",
+  id: "subject",
+  "class": "form-control"
+})])])], -1 /* HOISTED */);
+var _hoisted_56 = {
+  "class": "modal-footer"
+};
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(this.accountings.data, function (accounting) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.id), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Course), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Group), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Subject), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Lectures), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Practices), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Labs), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Moduls), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Consultations_Sem), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Consultations_Ex), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Tests), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.CourseWorks), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasBak), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasSpec), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasMag), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.PracticeManagements), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.StateExams), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.TotalHours), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Month), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Type), 1 /* TEXT */)]);
-  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("nav", _hoisted_24, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_25, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(this.accountings.links, function (link) {
-    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", _hoisted_26, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
+  }), 256 /* UNKEYED_FRAGMENT */))]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", _hoisted_24, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(this.newaccountings, function (accounting) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_25, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.id), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_26, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Course), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_27, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Group), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_28, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Subject), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_29, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Lectures), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Practices), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_31, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Labs), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_32, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Moduls), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_33, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Consultations_Sem), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_34, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Consultations_Ex), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_35, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Tests), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_36, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.CourseWorks), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_37, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasBak), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_38, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasSpec), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_39, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasMag), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_40, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.PracticeManagements), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_41, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.StateExams), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_42, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.TotalHours), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_43, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Month), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_44, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Type), 1 /* TEXT */)]);
+  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("nav", _hoisted_45, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("ul", _hoisted_46, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(this.accountings.links, function (link) {
+    return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("li", _hoisted_47, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("a", {
       "class": "page-link",
       href: link.url
-    }, [link.label == '« Previous' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_28, "Prev")) : link.label == 'Next »' ? ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_29, "Next")) : ((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("div", _hoisted_30, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(link.label), 1 /* TEXT */))], 8 /* PROPS */, _hoisted_27)]);
-  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" <paginate v-model=\"page\" :page-count=\"this.accountings.last_page\" :click-handler=\"clickCallback(this, elem)\"\r\n                :prev-text=\"'Prev'\" :next-text=\"'Next'\" :container-class=\"'pagination'\" :page-class=\"'page-item'\">\r\n            </paginate>  "), _hoisted_31], 64 /* STABLE_FRAGMENT */);
+    }, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(link.label), 1 /* TEXT */)], 8 /* PROPS */, _hoisted_48)]);
+  }), 256 /* UNKEYED_FRAGMENT */))])]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_49, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "lazybutton",
+    onClick: _cache[0] || (_cache[0] = function () {
+      return $options.btnClick && $options.btnClick.apply($options, arguments);
+    }),
+    "class": "btn btn-primary mx-2"
+  }, "Еще записи"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "addmodalbutton",
+    onClick: _cache[1] || (_cache[1] = function ($event) {
+      return $options.modalClick($event.target.id);
+    }),
+    "class": "btn btn-primary mx-2",
+    "data-bs-toggle": "modal",
+    "data-bs-target": "#addModal"
+  }, "Добавить"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "editmodalbutton",
+    onClick: _cache[2] || (_cache[2] = function ($event) {
+      return $options.modalClick($event.target.id);
+    }),
+    "class": "btn btn-primary mx-2",
+    "data-bs-toggle": "modal",
+    "data-bs-target": "#addModal"
+  }, "Изменить"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "removemodalbutton",
+    onClick: _cache[3] || (_cache[3] = function ($event) {
+      return $options.modalClick($event.target.id);
+    }),
+    "class": "btn btn-primary mx-2",
+    "data-bs-toggle": "modal",
+    "data-bs-target": "#addModal"
+  }, "Удалить")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" crud operations "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createCommentVNode)(" Add "), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_50, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_51, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_52, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_53, [_hoisted_54, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    "class": "btn-close",
+    "data-bs-dismiss": "modal",
+    onClick: _cache[4] || (_cache[4] = function () {
+      return $options.closeModal && $options.closeModal.apply($options, arguments);
+    }),
+    "aria-label": "Close"
+  })]), _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "addbutton",
+    "class": "btn btn-primary addmodalbutton",
+    style: {
+      "display": "none"
+    },
+    onClick: _cache[5] || (_cache[5] = function () {
+      return $options.addClick && $options.addClick.apply($options, arguments);
+    })
+  }, "Save"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "editbutton",
+    "class": "btn btn-primary editmodalbutton",
+    style: {
+      "display": "none"
+    },
+    onClick: _cache[6] || (_cache[6] = function () {
+      return _ctx.editClick && _ctx.editClick.apply(_ctx, arguments);
+    })
+  }, "Edit"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "removebutton",
+    "class": "btn btn-primary removemodalbutton",
+    style: {
+      "display": "none"
+    },
+    onClick: _cache[7] || (_cache[7] = function () {
+      return _ctx.delClick && _ctx.delClick.apply(_ctx, arguments);
+    })
+  }, "Remove")])])])])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),
@@ -51553,6 +51773,7 @@ __webpack_require__.r(__webpack_exports__);
 /* harmony import */ var dropzone_vue__WEBPACK_IMPORTED_MODULE_6___default = /*#__PURE__*/__webpack_require__.n(dropzone_vue__WEBPACK_IMPORTED_MODULE_6__);
 /* harmony import */ var vuejs_paginate_next__WEBPACK_IMPORTED_MODULE_7__ = __webpack_require__(/*! vuejs-paginate-next */ "./node_modules/vuejs-paginate-next/dist/vuejs-paginate-next.es.js");
 /* harmony import */ var dropzone_vue_dist_dropzone_vue_common_css__WEBPACK_IMPORTED_MODULE_8__ = __webpack_require__(/*! dropzone-vue/dist/dropzone-vue.common.css */ "./node_modules/dropzone-vue/dist/dropzone-vue.common.css");
+/* harmony import */ var axios__WEBPACK_IMPORTED_MODULE_12__ = __webpack_require__(/*! axios */ "./node_modules/axios/lib/axios.js");
 /* harmony import */ var vue_axios__WEBPACK_IMPORTED_MODULE_9__ = __webpack_require__(/*! vue-axios */ "./node_modules/vue-axios/dist/vue-axios.esm.min.js");
 /* harmony import */ var bootstrap_dist_css_bootstrap_min_css__WEBPACK_IMPORTED_MODULE_10__ = __webpack_require__(/*! bootstrap/dist/css/bootstrap.min.css */ "./node_modules/bootstrap/dist/css/bootstrap.min.css");
 /* harmony import */ var bootstrap__WEBPACK_IMPORTED_MODULE_11__ = __webpack_require__(/*! bootstrap */ "./node_modules/bootstrap/dist/js/bootstrap.esm.js");
@@ -51587,7 +51808,7 @@ app.component('signin', _components_LoginComponent_vue__WEBPACK_IMPORTED_MODULE_
 app.component('cabinet', _components_CabinetComponent_vue__WEBPACK_IMPORTED_MODULE_3__["default"]);
 app.component('view-data', _components_ViewDataComponent_vue__WEBPACK_IMPORTED_MODULE_4__["default"]);
 app.component('drop-zone', _components_FileUploaderComponent_vue__WEBPACK_IMPORTED_MODULE_5__["default"]);
-app.use((dropzone_vue__WEBPACK_IMPORTED_MODULE_6___default())).mount('#app');
+app.use((dropzone_vue__WEBPACK_IMPORTED_MODULE_6___default()), axios__WEBPACK_IMPORTED_MODULE_12__["default"], vue_axios__WEBPACK_IMPORTED_MODULE_9__["default"]).mount('#app');
 })();
 
 /******/ })()

@@ -38,6 +38,6 @@ app.component('cabinet', Cabinet)
 app.component('view-data', ViewData)
 app.component('drop-zone', FileUploader)
 
-app.use(DropZone).mount('#app');
+app.use(DropZone, axios, VueAxios ).mount('#app');
 
 

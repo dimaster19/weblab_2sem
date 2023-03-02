@@ -6,7 +6,7 @@ use App\Http\Controllers\RegisterController;
 use App\Http\Controllers\LoginController;
 use App\Http\Controllers\CabinetPageController;
 use App\Http\Controllers\ViewPageController;
-
+use App\Http\Controllers\AccountingController;
 /*
 |--------------------------------------------------------------------------
 | Web Routes
@@ -33,6 +33,7 @@ Route::get('/cabinet', [CabinetPageController::class, '__invoke'])->name('cabine
 Route::post('/cabinet', [CabinetPageController::class, 'getName'])->name('getName');
 
 Route::get('/view-data', [ViewPageController::class, '__invoke'])->name('view-data');
-// Route::post('/view-data', [ViewPageController::class, 'getData'])->name('getData');
-Route::get('/view-data/{page}', [ViewPageController::class, 'getData'])->name('getData');
-Route::post('/view-data/{page}', [ViewPageController::class, 'getData'])->name('getData');
+Route::get('/getdata', [ViewPageController::class, 'getData'])->name('getdata');
+
+
+Route::post('/add-data', [AccountingController::class, 'add'])->name('add-data');

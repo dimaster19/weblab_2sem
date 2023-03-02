@@ -14,7 +14,6 @@
 
 <body class="antialiased">
     <div id="app">
-        <!-- {{ print_r ($accountings)}} -->
         <view-data :accountings = '@json($accountings)' />
     </div>
 

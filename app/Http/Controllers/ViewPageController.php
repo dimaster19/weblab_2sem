@@ -7,6 +7,8 @@ use Illuminate\Http\Request;
 
 class ViewPageController extends Controller
 {
+
+
     /**
      * Handle the incoming request.
      *
@@ -16,6 +18,12 @@ class ViewPageController extends Controller
     public function __invoke(Request $request)
     {
 
+        // $accountings = Accounting::paginate(10);
+        // $accountings->withPath('/view-data');
+
+
+        // return view('viewdata', compact('accountings'));
+
         $accountings = Accounting::paginate(10);
         return view('viewdata', compact('accountings'));
 
@@ -23,10 +31,9 @@ class ViewPageController extends Controller
 
     public function getData(Request $request)
     {
-        // $page = $request['page'];
-        // $accountings = Accounting::paginate(10);
-        // return response()->json($accountings);
 
+        $accountings = Accounting::paginate(10);
+        return $accountings;
 
     }
 }
