@@ -37,3 +37,5 @@ Route::get('/getdata', [ViewPageController::class, 'getData'])->name('getdata');
 
 
 Route::post('/add-data', [AccountingController::class, 'add'])->name('add-data');
+Route::post('/del-data', [AccountingController::class, 'remove'])->name('del-data');
+Route::post('/edit-data', [AccountingController::class, 'edit'])->name('edit-data');

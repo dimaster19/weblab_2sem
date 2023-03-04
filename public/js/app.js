@@ -21032,7 +21032,9 @@ __webpack_require__.r(__webpack_exports__);
       course: null,
       group: null,
       subject: null,
-      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content')
+      csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+      modalType: null,
+      dbID: null
     };
   },
   created: function created() {
@@ -21056,32 +21058,80 @@ __webpack_require__.r(__webpack_exports__);
         console.log(error);
       });
     },
-    addClick: function addClick() {
-      this.group = document.getElementById("group").value;
-      this.course = document.getElementById("course").value;
-      this.subject = document.getElementById("subject").value;
-      console.log(this.group + ' - ' + this.course + ' - ' + this.subject);
-      if (this.group && this.course && this.subject) {
-        axios.post('/add-data', {
-          group: this.group,
-          course: this.course,
-          subject: this.subject
-        }).then(function (response) {
-          console.log(response);
-          if (response.data === 'added') alert('Успешно добавлено');
-        })["catch"](function (error) {
-          console.log(error);
-        });
-      } else alert('Заполните все поля');
+    actionClick: function actionClick() {
+      if (this.modalType === 'add') {
+        this.group = document.getElementById("group").value;
+        this.course = document.getElementById("course").value;
+        this.subject = document.getElementById("subject").value;
+        console.log(this.group + ' - ' + this.course + ' - ' + this.subject);
+        if (this.group && this.course && this.subject) {
+          axios.post('/add-data', {
+            group: this.group,
+            course: this.course,
+            subject: this.subject
+          }).then(function (response) {
+            console.log(response);
+            if (response.data === 'added') alert('Успешно добавлено');
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else alert('Заполните все поля');
+      } else if (this.modalType === 'remove') {
+        this.dbID = document.getElementById("del-input").value;
+        if (this.dbID) {
+          axios.post('/del-data', {
+            id: this.dbID
+          }).then(function (response) {
+            console.log(response);
+            alert(response.data);
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else alert('Введите ID записи');
+      } else if (this.modalType === 'edit') {
+        this.dbID = document.getElementById("search-input").value;
+        this.group = document.getElementById("group").value;
+        this.course = document.getElementById("course").value;
+        this.subject = document.getElementById("subject").value;
+        if (this.dbID) {
+          axios.post('/edit-data', {
+            id: this.dbID,
+            group: this.group,
+            course: this.course,
+            subject: this.subject
+          }).then(function (response) {
+            console.log(response);
+            alert(response.data);
+          })["catch"](function (error) {
+            console.log(error);
+          });
+        } else alert('Введите ID записи');
+      }
     },
     closeModal: function closeModal() {
       document.getElementsByClassName('addmodalbutton')[0].style.display = "none";
       document.getElementsByClassName('editmodalbutton')[0].style.display = "none";
-      document.getElementsByClassName('removemodalbutton')[0].style.display = "none";
+      document.getElementById('course').removeAttribute('disabled');
+      document.getElementById('group').removeAttribute('disabled');
+      document.getElementById('subject').removeAttribute('disabled');
+      document.getElementById('update-div').style.display = "none";
+      document.getElementById('del-div').style.display = "none";
     },
     modalClick: function modalClick(e) {
       console.log(e);
-      document.getElementsByClassName(e)[0].style.display = "block";
+      if (e !== 'removemodalbutton') document.getElementsByClassName(e)[0].style.display = "block";
+      if (e === 'editmodalbutton') {
+        document.getElementById('update-div').style.display = "flex";
+        this.modalType = 'edit';
+      } else if (e === 'removemodalbutton') {
+        document.getElementById('del-div').style.display = "flex";
+        document.getElementById('course').setAttribute('disabled', '');
+        document.getElementById('group').setAttribute('disabled', '');
+        document.getElementById('subject').setAttribute('disabled', '');
+        this.modalType = 'remove';
+      } else {
+        this.modalType = 'add';
+      }
       console.log(document.getElementsByClassName(e)[0]);
     }
   }
@@ -21472,7 +21522,8 @@ var _hoisted_55 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "modal-body"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("form", {
   action: "",
-  method: "post"
+  method: "post",
+  disabled: ""
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
   "class": "input-group mb-3"
 }, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("span", {
@@ -21499,8 +21550,34 @@ var _hoisted_55 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElement
   "class": "form-control"
 })])])], -1 /* HOISTED */);
 var _hoisted_56 = {
-  "class": "modal-footer"
+  "class": "modal-footer justify-content-between"
 };
+var _hoisted_57 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", {
+  id: "update-div",
+  style: {
+    "display": "none!important"
+  }
+}, [/*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "text",
+  oninput: "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1').replace(/^0[^.]/, '0');",
+  "class": "form-control",
+  id: "search-input",
+  placeholder: "ID"
+})], -1 /* HOISTED */);
+var _hoisted_58 = {
+  id: "del-div",
+  style: {
+    "display": "none!important"
+  }
+};
+var _hoisted_59 = /*#__PURE__*/(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("input", {
+  type: "text",
+  oninput: "this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\\..*?)\\..*/g, '$1').replace(/^0[^.]/, '0');",
+  "class": "form-control",
+  id: "del-input",
+  placeholder: "ID"
+}, null, -1 /* HOISTED */);
+
 function render(_ctx, _cache, $props, $setup, $data, $options) {
   return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, [_hoisted_1, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("table", _hoisted_2, [_hoisted_3, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("tbody", null, [((0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(true), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)(vue__WEBPACK_IMPORTED_MODULE_0__.Fragment, null, (0,vue__WEBPACK_IMPORTED_MODULE_0__.renderList)(this.accountings.data, function (accounting) {
     return (0,vue__WEBPACK_IMPORTED_MODULE_0__.openBlock)(), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementBlock)("tr", null, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_4, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.id), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_5, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Course), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_6, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Group), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_7, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Subject), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_8, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Lectures), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_9, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Practices), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_10, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Labs), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_11, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Moduls), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_12, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Consultations_Sem), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_13, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Consultations_Ex), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_14, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Tests), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_15, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.CourseWorks), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_16, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasBak), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_17, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasSpec), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_18, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.DiplomasMag), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_19, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.PracticeManagements), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_20, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.StateExams), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_21, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.TotalHours), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_22, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Month), 1 /* TEXT */), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("th", _hoisted_23, (0,vue__WEBPACK_IMPORTED_MODULE_0__.toDisplayString)(accounting.Type), 1 /* TEXT */)]);
@@ -21553,15 +21630,22 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
       return $options.closeModal && $options.closeModal.apply($options, arguments);
     }),
     "aria-label": "Close"
-  })]), _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [(0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+  })]), _hoisted_55, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_56, [_hoisted_57, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("div", _hoisted_58, [_hoisted_59, (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
+    type: "button",
+    id: "del-by-id-button",
+    onClick: _cache[5] || (_cache[5] = function () {
+      return $options.actionClick && $options.actionClick.apply($options, arguments);
+    }),
+    "class": "btn btn-primary del-by-id-button"
+  }, "Del")]), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
     id: "addbutton",
     "class": "btn btn-primary addmodalbutton",
     style: {
       "display": "none"
     },
-    onClick: _cache[5] || (_cache[5] = function () {
-      return $options.addClick && $options.addClick.apply($options, arguments);
+    onClick: _cache[6] || (_cache[6] = function () {
+      return $options.actionClick && $options.actionClick.apply($options, arguments);
     })
   }, "Save"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
     type: "button",
@@ -21570,20 +21654,10 @@ function render(_ctx, _cache, $props, $setup, $data, $options) {
     style: {
       "display": "none"
     },
-    onClick: _cache[6] || (_cache[6] = function () {
-      return _ctx.editClick && _ctx.editClick.apply(_ctx, arguments);
-    })
-  }, "Edit"), (0,vue__WEBPACK_IMPORTED_MODULE_0__.createElementVNode)("button", {
-    type: "button",
-    id: "removebutton",
-    "class": "btn btn-primary removemodalbutton",
-    style: {
-      "display": "none"
-    },
     onClick: _cache[7] || (_cache[7] = function () {
-      return _ctx.delClick && _ctx.delClick.apply(_ctx, arguments);
+      return $options.actionClick && $options.actionClick.apply($options, arguments);
     })
-  }, "Remove")])])])])], 64 /* STABLE_FRAGMENT */);
+  }, "Edit")])])])])], 64 /* STABLE_FRAGMENT */);
 }
 
 /***/ }),

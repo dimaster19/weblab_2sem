@@ -16,6 +16,8 @@ export default {
             group: null,
             subject: null,
             csrf: document.querySelector('meta[name="csrf-token"]').getAttribute('content'),
+            modalType: null,
+            dbID: null
 
         };
     },
@@ -51,45 +53,116 @@ export default {
                 })
         },
 
-        addClick: function () {
-            this.group = document.getElementById("group").value
-            this.course = document.getElementById("course").value
-            this.subject = document.getElementById("subject").value
-            console.log(this.group + ' - ' + this.course + ' - ' + this.subject)
-            if (this.group && this.course && this.subject) {
-                axios
-                    .post('/add-data', {
-                        group: this.group,
-                        course: this.course,
-                        subject: this.subject,
-                    })
-                    .then(response => {
+        actionClick: function () {
+            if (this.modalType === 'add') {
 
-                        console.log(response)
-                        if (response.data === 'added') alert('Успешно добавлено')
+                this.group = document.getElementById("group").value
+                this.course = document.getElementById("course").value
+                this.subject = document.getElementById("subject").value
+                console.log(this.group + ' - ' + this.course + ' - ' + this.subject)
+                if (this.group && this.course && this.subject) {
+                    axios
+                        .post('/add-data', {
+                            group: this.group,
+                            course: this.course,
+                            subject: this.subject,
+                        })
+                        .then(response => {
 
-                    })
-                    .catch(error => {
-                        console.log(error);
-                    })
+                            console.log(response)
+                            if (response.data === 'added') alert('Успешно добавлено')
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+                else alert('Заполните все поля')
             }
-            else alert('Заполните все поля') 
+            else if (this.modalType === 'remove') {
+                this.dbID = document.getElementById("del-input").value
+                if (this.dbID) {
+                    axios
+                        .post('/del-data', {
+                            id: this.dbID,
+                        })
+                        .then(response => {
+
+                            console.log(response)
+                            alert(response.data)
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+                else alert('Введите ID записи')
+
+            }
+
+            else if (this.modalType === 'edit') {
+                this.dbID = document.getElementById("search-input").value
+                this.group = document.getElementById("group").value
+                this.course = document.getElementById("course").value
+                this.subject = document.getElementById("subject").value
+                if (this.dbID) {
+                    axios
+                        .post('/edit-data', {
+                            id: this.dbID,
+                            group: this.group,
+                            course: this.course,
+                            subject: this.subject,
+                        })
+                        .then(response => {
+
+                            console.log(response)
+                            alert(response.data)
+
+                        })
+                        .catch(error => {
+                            console.log(error);
+                        })
+                }
+                else alert('Введите ID записи')
+
+            }
+
+
 
         },
-        
+
         closeModal: function () {
-           
+
             document.getElementsByClassName('addmodalbutton')[0].style.display = "none";
             document.getElementsByClassName('editmodalbutton')[0].style.display = "none";
-            document.getElementsByClassName('removemodalbutton')[0].style.display = "none";
-
+            document.getElementById('course').removeAttribute('disabled');
+            document.getElementById('group').removeAttribute('disabled');
+            document.getElementById('subject').removeAttribute('disabled');
+            document.getElementById('update-div').style.display = "none";
+            document.getElementById('del-div').style.display = "none";
 
         },
 
         modalClick: function (e) {
             console.log(e)
-            document.getElementsByClassName(e)[0].style.display = "block";
-            console.log( document.getElementsByClassName(e)[0]);
+            if (e !== 'removemodalbutton') document.getElementsByClassName(e)[0].style.display = "block";
+            if (e === 'editmodalbutton') {
+                document.getElementById('update-div').style.display = "flex";
+                this.modalType = 'edit'
+            }
+            else if (e === 'removemodalbutton') {
+                document.getElementById('del-div').style.display = "flex";
+                document.getElementById('course').setAttribute('disabled', '');
+                document.getElementById('group').setAttribute('disabled', '');
+                document.getElementById('subject').setAttribute('disabled', '');
+                this.modalType = 'remove'
+            }
+            else {
+                this.modalType = 'add'
+
+            }
+
+            console.log(document.getElementsByClassName(e)[0]);
 
         },
 
@@ -191,12 +264,12 @@ export default {
 
         <button type="button" id="lazybutton" v-on:click="btnClick" class="btn btn-primary mx-2">Еще записи</button>
 
-        <button type="button" id="addmodalbutton" @click="modalClick($event.target.id)" class="btn btn-primary mx-2" data-bs-toggle="modal"
-            data-bs-target="#addModal">Добавить</button>
-        <button type="button" id="editmodalbutton" @click="modalClick($event.target.id)" class="btn btn-primary mx-2" data-bs-toggle="modal"
-            data-bs-target="#addModal">Изменить</button>
-        <button type="button" id="removemodalbutton" @click="modalClick($event.target.id)" class="btn btn-primary mx-2" data-bs-toggle="modal"
-            data-bs-target="#addModal">Удалить</button>
+        <button type="button" id="addmodalbutton" @click="modalClick($event.target.id)" class="btn btn-primary mx-2"
+            data-bs-toggle="modal" data-bs-target="#addModal">Добавить</button>
+        <button type="button" id="editmodalbutton" @click="modalClick($event.target.id)" class="btn btn-primary mx-2"
+            data-bs-toggle="modal" data-bs-target="#addModal">Изменить</button>
+        <button type="button" id="removemodalbutton" @click="modalClick($event.target.id)" class="btn btn-primary mx-2"
+            data-bs-toggle="modal" data-bs-target="#addModal">Удалить</button>
     </div>
 
 
@@ -210,10 +283,11 @@ export default {
             <div class="modal-content">
                 <div class="modal-header">
                     <h5 class="modal-title" id="exampleModalLabel">Modal title</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" v-on:click = "closeModal" aria-label="Close"></button>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" v-on:click="closeModal"
+                        aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <form action="" method="post">
+                    <form action="" method="post" disabled>
 
                         <div class="input-group mb-3">
                             <span class="input-group-text">Course</span>
@@ -229,12 +303,26 @@ export default {
                         </div>
                     </form>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" id='addbutton' class="btn btn-primary  addmodalbutton" style="display: none;"  v-on:click="addClick">Save</button>
+                <div class="modal-footer justify-content-between">
+                    <div id="update-div" style="display: none!important;">
+                        <input type="text"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                            class="form-control" id="search-input" placeholder="ID">
+
+                    </div>
+                    <div id="del-div" style="display: none!important;">
+                        <input type="text"
+                            oninput="this.value = this.value.replace(/[^0-9.]/g, '').replace(/(\..*?)\..*/g, '$1').replace(/^0[^.]/, '0');"
+                            class="form-control" id="del-input" placeholder="ID">
+                        <button type="button" id='del-by-id-button' v-on:click="actionClick"
+                            class="btn btn-primary del-by-id-button">Del</button>
+                    </div>
+
+                    <button type="button" id='addbutton' class="btn btn-primary  addmodalbutton" style="display: none;"
+                        v-on:click="actionClick">Save</button>
                     <button type="button" id='editbutton' class="btn btn-primary editmodalbutton" style="display: none"
-                        v-on:click="editClick">Edit</button>
-                    <button type="button" id='removebutton' class="btn btn-primary removemodalbutton" style="display: none;"
-                        v-on:click="delClick">Remove</button>
+                        v-on:click="actionClick">Edit</button>
+                
 
                 </div>
             </div>

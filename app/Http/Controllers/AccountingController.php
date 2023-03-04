@@ -26,9 +26,34 @@ class AccountingController extends Controller
             'Group' => $request->group,
             'Subject' => $request->subject,
 
-    ]);
+        ]);
 
-    return 'added';
+        return 'added';
     }
 
+
+    public function remove(Request $request)
+    {
+
+
+        Accounting::destroy($request->id);
+
+        return 'Запись №' . $request->id . ' удалена';
+    }
+
+    public function edit(Request $request)
+    {
+
+
+            // Не могу использовать laravel find + save, так как я долбопоп непрочитавший правила именования :)
+            Log::debug($request);
+
+        Accounting::where('id', $request->id)->update([ 'Course' => $request->course,
+        'Group' => $request->group,
+        'Subject' => $request->subject,]);
+
+        Log::debug(  Accounting::find($request->id));
+
+        return 'Запись №' . $request->id . ' изменена';
+    }
 }
