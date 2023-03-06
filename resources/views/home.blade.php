@@ -25,7 +25,7 @@
 
                 <input type="file" name="file"  onchange='fileValidation()' accept=".xlsx" id="file">
 
-                <input type="submit" value="Войти" />
+                <input type="submit" value="Отправить" />
         </form>
 
 

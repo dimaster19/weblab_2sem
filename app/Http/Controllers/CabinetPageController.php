@@ -1,13 +1,18 @@
 <?php
 
 namespace App\Http\Controllers;
+use Illuminate\Support\Facades\Auth;
 
 use Illuminate\Http\Request;
 
 class CabinetPageController extends Controller
 {
     public function __invoke(Request $request) {
-        return view('cabinet');
+        if (Auth::check()) {
+            return view('cabinet');
+
+        }
+        else return view('signin');
     }
 
 

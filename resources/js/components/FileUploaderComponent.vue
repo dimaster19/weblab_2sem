@@ -21,7 +21,7 @@
                     <button type="button" class="btn-close" data-bs-dismiss="modal" v-on:click="closeModal" aria-label="Закрыть"></button>
                 </div>
                 <div class="modal-body">
-                    какая-то хуетень
+                    Не то
                 </div>
 
             </div>
